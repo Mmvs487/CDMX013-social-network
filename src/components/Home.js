@@ -1,6 +1,6 @@
 import { onNavigate } from '../main.js';
 import { existingUserAccess } from '../lib/auth.js';
-import { savePost } from '../lib/firestore.js';
+import { savePost, getPosts } from '../lib/firestore.js';
 
 export function Home() {
   //Generador de posts
@@ -23,12 +23,18 @@ export function Home() {
   submitButton.textContent = 'Submit Question';
   lotoBoxContainer.append(postAQuestion, postTextBox, submitButton)
 
-  submitButton.addEventListener('click', async (e) => {
+  //Función para cargar los posts
+  window.addEventListener('DOMContentLoaded', async (e)=>{
+    const posts = await getPosts(e.target.data);
+    console.log(posts)
+  });
+
+  submitButton.addEventListener('click', (e) => {
     //e.preventDefault();
     const mail = 'mailDeUsuario';
     const post = postTextBox.value;
     
-    await savePost(mail, post);
+    savePost(mail, post);
     postTextBox.value = '';
   });
 
